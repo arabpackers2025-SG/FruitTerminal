@@ -1,0 +1,63 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Build web app
+        working-directory: web
+        env:
+          DATABASE_URL: postgresql://build:build@localhost:5432/build
+        run: |
+          npm ci
+          npm run build
+          # standalone bundle + static assets + migrations + db scripts
+          mkdir -p ../bundle
+          cp -r .next/standalone/. ../bundle/
+          mkdir -p ../bundle/.next/static ../bundle/public
+          cp -r .next/static/. ../bundle/.next/static/
+          cp -r public/. ../bundle/public/
+          cp -r drizzle ../bundle/drizzle
+          cp drizzle.config.ts ../bundle/
+          mkdir -p ../bundle/src
+          cp -r src/db src/lib ../bundle/src/
+          cp package.json package-lock.json tsconfig.json ../bundle/
+
+      - name: Package
+        run: |
+          tar czf web-bundle.tgz -C bundle .
+          tar czf scraper.tgz scraper --exclude=scraper/.venv --exclude=scraper/.env
+
+      - name: Upload to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "web-bundle.tgz,scraper.tgz,deploy/"
+          target: /srv/fruitterminal/incoming
+
+      - name: Install on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: bash /srv/fruitterminal/incoming/deploy/release.sh

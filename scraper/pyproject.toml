@@ -1,0 +1,20 @@
+[project]
+name = "fruitterminal-scraper"
+version = "0.1.0"
+description = "Collects wholesale fruit terminal member lists into the Fruit Terminal staging table."
+requires-python = ">=3.11"
+dependencies = [
+  "scrapling[fetchers]>=0.3",
+  "psycopg[binary]>=3.1",
+  "python-dotenv>=1.0",
+]
+
+[project.scripts]
+ft-scrape = "fruitterminal_scraper.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["fruitterminal_scraper*"]

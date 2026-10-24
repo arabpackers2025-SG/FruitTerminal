@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&display=swap");
+@import "tailwindcss";
+
+:root {
+  --paper: #f4f7f2;
+  --paper-2: #e9eee6;
+  --ink: #15231b;
+  --ink-2: #41504a;
+  --stone: #7b857f;
+  --line: #cfd8d1;
+  --green: #1e6b3c;
+  --green-deep: #134a29;
+  --citrus: #f2c230;
+  --stamp: #b8402e;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-stone: var(--stone);
+  --color-line: var(--line);
+  --color-green: var(--green);
+  --color-green-deep: var(--green-deep);
+  --color-citrus: var(--citrus);
+  --color-stamp: var(--stamp);
+  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  font-variation-settings: "wdth" 112;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid var(--citrus);
+  outline-offset: 2px;
+}
+
+/* stall-tag card */
+.tag {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--green);
+  border-radius: 2px;
+}
+.tag--unclaimed { border-left-color: var(--stone); }
+.tag--verified { border-left-color: var(--citrus); }
+
+.masked {
+  font-variant-numeric: tabular-nums;
+  color: var(--stone);
+  letter-spacing: 0.05em;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.board-row:hover { background: var(--paper-2); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .board-row { transition: background 120ms ease; }
+}
+
+.leaflet-container { font-family: inherit; }
