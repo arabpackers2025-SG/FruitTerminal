@@ -1,6 +1,7 @@
 import { CompanyCard } from "@/components/company-card";
 import { EmptyState, FilterBar, Pager } from "@/components/filters";
 import { countsByCountry, listCategories, listCompanies, listTerminals } from "@/lib/queries";
+import { getLocale, translator } from "@/lib/i18n";
 
 type SP = { [key: string]: string | string[] | undefined };
 const str = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) || undefined;
@@ -9,15 +10,16 @@ export async function Directory({
   role,
   sp,
   base,
-  title,
-  intro,
+  titleKey,
+  introKey,
 }: {
   role: "BUYER" | "SELLER";
   sp: SP;
   base: string;
-  title: string;
-  intro: string;
+  titleKey: string;
+  introKey: string;
 }) {
+  const t = translator(await getLocale());
   const q = str(sp.q), country = str(sp.country), product = str(sp.product), terminal = str(sp.terminal);
   const page = Number(str(sp.page) ?? 1) || 1;
 
@@ -39,8 +41,8 @@ export async function Directory({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-4xl font-black">{title}</h1>
-      <p className="mt-3 max-w-2xl text-lg text-ink-2">{intro}</p>
+      <h1 className="text-4xl font-black">{t(titleKey)}</h1>
+      <p className="mt-3 max-w-2xl text-lg text-ink-2">{t(introKey)}</p>
       <div className="mt-6">
         <FilterBar
           action={base} q={q} country={country} countries={countries} product={product} products={products}
@@ -50,8 +52,8 @@ export async function Directory({
       </div>
       {result.rows.length === 0 ? (
         <EmptyState>
-          <p className="font-semibold">No companies match these filters.</p>
-          <p className="mt-1">Try a wider product group or clear the country filter.</p>
+          <p className="font-semibold">{t("empty.noMatch")}</p>
+          <p className="mt-1">{t("empty.tryWider")}</p>
         </EmptyState>
       ) : (
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

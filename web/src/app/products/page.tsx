@@ -1,17 +1,19 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { listCategories } from "@/lib/queries";
+import { getLocale, translator } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Products", description: "Fresh produce categories: find exporters and buyers for each." };
 
 export default async function ProductsPage() {
-  const { byParent } = await listCategories();
+  const [{ byParent }, locale] = await Promise.all([listCategories(), getLocale()]);
+  const tr = translator(locale);
   const roots = byParent.get(null) ?? [];
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-4xl font-black">Products</h1>
-      <p className="mt-3 max-w-2xl text-lg text-ink-2">Pick a product to see who exports it and who buys it.</p>
+      <h1 className="text-4xl font-black">{tr("products.title")}</h1>
+      <p className="mt-3 max-w-2xl text-lg text-ink-2">{tr("products.intro")}</p>
       <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {roots.map((r) => (
           <section key={r.id}>

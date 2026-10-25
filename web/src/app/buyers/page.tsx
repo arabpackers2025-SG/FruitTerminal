@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 export default async function BuyersPage({ searchParams }: PageProps<"/buyers">) {
   const sp = await searchParams;
   return (
-    <Directory role="BUYER" sp={sp} base="/buyers" title="Buyers and importers"
-      intro="Terminal wholesalers, importers and distributors. Filter by terminal to see who trades inside a market, or by product to find who buys what you grow." />
+    <Directory role="BUYER" sp={sp} base="/buyers" titleKey="buyers.title" introKey="buyers.intro" />
   );
 }

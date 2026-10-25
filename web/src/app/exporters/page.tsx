@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 export default async function ExportersPage({ searchParams }: PageProps<"/exporters">) {
   const sp = await searchParams;
   return (
-    <Directory role="SELLER" sp={sp} base="/exporters" title="Exporters and growers"
-      intro="Growers, packhouses and export companies. Filter by product and country to find supply for your season." />
+    <Directory role="SELLER" sp={sp} base="/exporters" titleKey="exporters.title" introKey="exporters.intro" />
   );
 }

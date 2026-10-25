@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { countryName, flag } from "@/lib/countries";
 import { listTerminals } from "@/lib/queries";
+import { getLocale, translator } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -10,17 +11,15 @@ export const metadata: Metadata = {
 };
 
 export default async function TerminalsPage() {
-  const terms = await listTerminals();
+  const [terms, locale] = await Promise.all([listTerminals(), getLocale()]);
+  const tr = translator(locale);
   const byCountry = new Map<string, typeof terms>();
   for (const t of terms) byCountry.set(t.country, [...(byCountry.get(t.country) ?? []), t]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-4xl font-black">Fruit terminals</h1>
-      <p className="mt-3 max-w-2xl text-lg text-ink-2">
-        The wholesale markets where imported produce is sold to retailers and foodservice. Each page lists the
-        wholesalers inside the terminal; more terminals are added as their member lists are collected.
-      </p>
+      <h1 className="text-4xl font-black">{tr("terminals.title")}</h1>
+      <p className="mt-3 max-w-2xl text-lg text-ink-2">{tr("terminals.intro")}</p>
       <div className="mt-8 grid gap-8 md:grid-cols-2">
         {[...byCountry.entries()].map(([country, list]) => (
           <section key={country}>
@@ -33,7 +32,7 @@ export default async function TerminalsPage() {
                   <span className="font-semibold">{t.name}</span>
                   <span className="block text-sm text-ink-2">{t.city}</span>
                 </span>
-                <span className="text-sm tabular-nums text-ink-2">{t.companyCount} listed</span>
+                <span className="text-sm tabular-nums text-ink-2">{tr("terminals.listed", { n: t.companyCount })}</span>
               </Link>
             ))}
           </section>
