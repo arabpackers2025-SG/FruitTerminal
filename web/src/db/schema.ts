@@ -188,6 +188,7 @@ export const inquiries = pgTable(
     offerId: text("offer_id").references(() => offers.id),
     requestId: text("request_id").references(() => buyRequests.id),
     message: text("message").notNull(),
+    readAt: timestamp("read_at", { withTimezone: true }),
     createdAt: createdAt(),
   },
   (t) => [
@@ -233,6 +234,19 @@ export const claimRequests = pgTable("claim_requests", {
   createdAt: createdAt(),
 });
 
+export const sessions = pgTable(
+  "sessions",
+  {
+    id: id(), // the session token (random), stored in an httpOnly cookie
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("sessions_user_idx").on(t.userId)],
+);
+
 /** Rows written by the scraper; an admin approves them into `companies`. */
 export const stagingCompanies = pgTable(
   "staging_companies",
@@ -269,6 +283,8 @@ export const companiesRelations = relations(companies, ({ one, many }) => ({
   offers: many(offers),
   requests: many(buyRequests),
   subscription: one(subscriptions, { fields: [companies.id], references: [subscriptions.companyId] }),
+  sentInquiries: many(inquiries, { relationName: "from" }),
+  receivedInquiries: many(inquiries, { relationName: "to" }),
 }));
 
 export const profilesRelations = relations(profiles, ({ one }) => ({
@@ -304,4 +320,16 @@ export const buyRequestsRelations = relations(buyRequests, ({ one }) => ({
     fields: [buyRequests.categoryId],
     references: [productCategories.id],
   }),
+}));
+
+export const inquiriesRelations = relations(inquiries, ({ one }) => ({
+  fromCompany: one(companies, { fields: [inquiries.fromCompanyId], references: [companies.id], relationName: "from" }),
+  toCompany: one(companies, { fields: [inquiries.toCompanyId], references: [companies.id], relationName: "to" }),
+  offer: one(offers, { fields: [inquiries.offerId], references: [offers.id] }),
+  request: one(buyRequests, { fields: [inquiries.requestId], references: [buyRequests.id] }),
+}));
+
+export const claimRequestsRelations = relations(claimRequests, ({ one }) => ({
+  company: one(companies, { fields: [claimRequests.companyId], references: [companies.id] }),
+  user: one(users, { fields: [claimRequests.userId], references: [users.id] }),
 }));

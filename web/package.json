@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "staging:list": "tsx src/db/approve.ts list",
     "staging:approve": "tsx src/db/approve.ts approve",
-    "staging:reject": "tsx src/db/approve.ts reject"
+    "staging:reject": "tsx src/db/approve.ts reject",
+    "create-admin": "tsx src/db/create-admin.ts"
   },
   "dependencies": {
     "@types/leaflet": "^1.9.22",

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { getSessionUser } from "@/lib/auth";
+import { signOutAction } from "@/lib/actions/auth";
 
 const nav = [
   { href: "/terminals", label: "Terminals" },
@@ -8,7 +10,8 @@ const nav = [
   { href: "/pricing", label: "Pricing" },
 ];
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const user = await getSessionUser();
   return (
     <header className="border-b border-line bg-paper">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4">
@@ -26,15 +29,33 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <Link href="/pricing" className="hidden text-sm font-medium text-ink-2 hover:text-ink sm:inline">
-            Sign in
-          </Link>
-          <Link
-            href="/pricing"
-            className="rounded-sm bg-green px-3 py-2 text-sm font-semibold text-white hover:bg-green-deep"
-          >
-            List your company
-          </Link>
+          {user ? (
+            <>
+              <Link href="/dashboard" className="text-sm font-semibold text-ink hover:text-green">
+                Dashboard
+              </Link>
+              {user.role === "ADMIN" && (
+                <Link href="/admin" className="hidden text-sm font-medium text-ink-2 hover:text-ink sm:inline">
+                  Admin
+                </Link>
+              )}
+              <form action={signOutAction}>
+                <button className="text-sm font-medium text-ink-2 hover:text-ink">Sign out</button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="hidden text-sm font-medium text-ink-2 hover:text-ink sm:inline">
+                Sign in
+              </Link>
+              <Link
+                href="/signup"
+                className="rounded-sm bg-green px-3 py-2 text-sm font-semibold text-white hover:bg-green-deep"
+              >
+                List your company
+              </Link>
+            </>
+          )}
         </div>
       </div>
       <nav className="flex gap-4 overflow-x-auto border-t border-line px-4 py-2 text-sm font-medium text-ink-2 md:hidden">

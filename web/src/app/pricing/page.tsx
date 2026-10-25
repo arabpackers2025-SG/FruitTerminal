@@ -34,7 +34,7 @@ export default function PricingPage() {
               ${p.price}<span className="text-base font-medium text-ink-2"> / month</span>
             </p>
             <p className="mt-1 text-sm text-ink-2">{p.note}</p>
-            <a href="mailto:order@saguenygroup.com?subject=Fruit%20Terminal%20early%20access" className="mt-5 block rounded-sm bg-green px-4 py-2.5 text-center font-semibold text-white hover:bg-green-deep">
+            <a href="/signup" className="mt-5 block rounded-sm bg-green px-4 py-2.5 text-center font-semibold text-white hover:bg-green-deep">
               {p.cta}
             </a>
           </div>

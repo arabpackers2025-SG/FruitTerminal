@@ -26,8 +26,8 @@ export default async function CompanyPage({ params }: PageProps<"/company/[slug]
   const c = await getCompany(slug);
   if (!c) notFound();
 
-  const viewer = getViewer();
-  const canSee = viewerCanSeeContacts(viewer);
+  const viewer = await getViewer();
+  const canSee = viewerCanSeeContacts(viewer, c.id);
   const sells = c.products.filter((p) => p.direction === "SELLS");
   const buys = c.products.filter((p) => p.direction === "BUYS");
   const hasContact = c.phone || c.email || c.website;
@@ -161,7 +161,7 @@ export default async function CompanyPage({ params }: PageProps<"/company/[slug]
               <Link href="/pricing" className="font-semibold text-green hover:underline">See plans</Link>
             </p>
           )}
-          <Link href="/pricing" className="mt-4 block rounded-sm bg-green px-4 py-2.5 text-center font-semibold text-white hover:bg-green-deep">
+          <Link href={`/inquire/${c.slug}`} className="mt-4 block rounded-sm bg-green px-4 py-2.5 text-center font-semibold text-white hover:bg-green-deep">
             Send an inquiry
           </Link>
           <p className="mt-2 text-center text-xs text-stone">Free accounts can send one inquiry a day.</p>
@@ -172,7 +172,7 @@ export default async function CompanyPage({ params }: PageProps<"/company/[slug]
               <p className="mt-1 text-ink-2">
                 This listing was compiled from {c.source === "founder" ? "public" : "public"} sources. Claim it to correct the details and receive inquiries.
               </p>
-              <Link href="/pricing" className="mt-2 inline-block font-semibold text-green hover:underline">Claim this profile</Link>
+              <Link href={`/claim/${c.slug}`} className="mt-2 inline-block font-semibold text-green hover:underline">Claim this profile</Link>
               <span className="mx-2 text-stone">·</span>
               <Link href="/about#listings" className="text-ink-2 hover:underline">Remove or correct</Link>
             </div>

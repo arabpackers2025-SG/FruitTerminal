@@ -1,13 +1,21 @@
-/** Who may see contact details. Phase 1 has no login, so every visitor is anonymous
-    and contact details are masked. Phase 3 replaces `viewerCanSeeContacts` with the
-    subscription check. */
-export type Viewer = { plan: "ANON" | "FREE" | "SELLER_PRO" | "BUYER_PRO" | "ADMIN" };
+import { getSessionUser } from "@/lib/auth";
 
-export function getViewer(): Viewer {
-  return { plan: "ANON" };
+/** Who may see contact details: anonymous and free members see masked contacts;
+    paid members and admins see them in full. A company always sees its own. */
+export type Viewer = {
+  plan: "ANON" | "FREE" | "SELLER_PRO" | "BUYER_PRO" | "ADMIN";
+  companyId: string | null;
+};
+
+export async function getViewer(): Promise<Viewer> {
+  const user = await getSessionUser();
+  if (!user) return { plan: "ANON", companyId: null };
+  if (user.role === "ADMIN") return { plan: "ADMIN", companyId: user.companyId };
+  return { plan: user.plan, companyId: user.companyId };
 }
 
-export function viewerCanSeeContacts(v: Viewer) {
+export function viewerCanSeeContacts(v: Viewer, ownerCompanyId?: string | null) {
+  if (ownerCompanyId && v.companyId && ownerCompanyId === v.companyId) return true;
   return v.plan === "SELLER_PRO" || v.plan === "BUYER_PRO" || v.plan === "ADMIN";
 }
 
