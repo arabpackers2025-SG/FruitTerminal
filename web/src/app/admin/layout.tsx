@@ -12,6 +12,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <Link href="/admin" className="hover:text-green">Overview</Link>
         <Link href="/admin/claims" className="hover:text-green">Claims</Link>
         <Link href="/admin/staging" className="hover:text-green">Scraped review</Link>
+        <Link href="/admin/companies" className="hover:text-green">Companies</Link>
+        <Link href="/admin/revenue" className="hover:text-green">Revenue</Link>
+        <Link href="/admin/import" className="hover:text-green">Import CSV</Link>
       </nav>
       {children}
     </div>

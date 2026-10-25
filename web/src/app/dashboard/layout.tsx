@@ -8,6 +8,7 @@ const items = [
   { href: "/dashboard/offers", label: "Offers" },
   { href: "/dashboard/requests", label: "Buy requests" },
   { href: "/dashboard/profile", label: "My listing" },
+  { href: "/dashboard/billing", label: "Billing" },
 ];
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {

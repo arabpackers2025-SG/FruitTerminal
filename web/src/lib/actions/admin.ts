@@ -58,3 +58,75 @@ export async function reviewStagingAction(form: FormData) {
   revalidatePath("/admin/staging");
   redirect("/admin/staging");
 }
+
+export async function verifyCompanyAction(form: FormData) {
+  await requireAdmin();
+  const id = clean(form.get("companyId"));
+  const verify = clean(form.get("verify")) === "1";
+  await db.update(companies).set({ status: verify ? "VERIFIED" : "CLAIMED" }).where(eq(companies.id, id));
+  revalidatePath("/admin/companies");
+  redirect("/admin/companies");
+}
+
+export type ImportState = { error?: string; ok?: string };
+
+/** Parse a single CSV line, honoring double-quoted fields. */
+function parseCsvLine(line: string): string[] {
+  const out: string[] = []; let cur = ""; let q = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (q) {
+      if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+      else if (ch === '"') q = false;
+      else cur += ch;
+    } else if (ch === '"') q = true;
+    else if (ch === ",") { out.push(cur); cur = ""; }
+    else cur += ch;
+  }
+  out.push(cur);
+  return out.map((s) => s.trim());
+}
+
+/** Admin bulk import of companies from CSV into staging for review.
+    Columns (header row, any order): name, website, phone, email, country, city, products, terminalSlug. */
+export async function importCsvAction(_prev: ImportState, form: FormData): Promise<ImportState> {
+  await requireAdmin();
+  const file = form.get("file");
+  if (!(file instanceof File) || file.size === 0) return { error: "Choose a CSV file." };
+  const text = (await file.text()).replace(/\r\n/g, "\n").trim();
+  const lines = text.split("\n").filter((l) => l.trim());
+  if (lines.length < 2) return { error: "The file has no data rows." };
+
+  const header = parseCsvLine(lines[0]).map((h) => h.toLowerCase());
+  const idx = (k: string) => header.indexOf(k);
+  if (idx("name") === -1) return { error: 'The CSV needs a "name" column.' };
+  const source = `csv:${new Date().toISOString().slice(0, 10)}`;
+
+  const rows = [];
+  for (const line of lines.slice(1)) {
+    const c = parseCsvLine(line);
+    const get = (k: string) => { const i = idx(k); return i >= 0 ? (c[i] || null) : null; };
+    const name = get("name");
+    if (!name) continue;
+    rows.push({
+      name,
+      website: get("website"), phone: get("phone"), email: get("email"),
+      country: (get("country") || "")?.toUpperCase() || null,
+      city: get("city"), products: get("products"),
+      terminalSlug: get("terminalslug") || get("terminal"),
+      source, sourceUrl: null, review: "PENDING" as const,
+    });
+  }
+  if (!rows.length) return { error: "No valid rows found (each row needs a name)." };
+
+  let n = 0;
+  for (const r of rows) {
+    await db.insert(stagingCompanies).values(r).onConflictDoUpdate({
+      target: [stagingCompanies.source, stagingCompanies.name],
+      set: { website: r.website, phone: r.phone, email: r.email, country: r.country, city: r.city, products: r.products, terminalSlug: r.terminalSlug },
+    });
+    n++;
+  }
+  revalidatePath("/admin/staging");
+  return { ok: `Imported ${n} row${n === 1 ? "" : "s"} into review. Approve them under “Scraped review”.` };
+}

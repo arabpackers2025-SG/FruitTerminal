@@ -8,7 +8,7 @@ import { offers, buyRequests, inquiries, companies, productCategories } from "@/
 import { getSessionUser } from "@/lib/auth";
 import { clean } from "@/lib/validate";
 import { dailyLimitFor, sentTodayCount } from "@/lib/member";
-import { notifyInquiry } from "@/lib/email";
+import { notifyInquiry, notifyMatchingMembers } from "@/lib/email";
 
 export type LeadState = { error?: string; ok?: string };
 
@@ -32,6 +32,7 @@ export async function createOfferAction(_prev: LeadState, form: FormData): Promi
     priceTerms: clean(form.get("priceTerms")) || null,
     details: clean(form.get("details")) || null,
   });
+  await notifyMatchingMembers({ categoryId, kind: "offer", title, excludeCompanyId: user!.companyId! });
   revalidatePath("/dashboard/offers");
   revalidatePath("/offers");
   return { ok: "Offer posted." };
@@ -50,6 +51,7 @@ export async function createRequestAction(_prev: LeadState, form: FormData): Pro
     destination: clean(form.get("destination")) || null,
     details: clean(form.get("details")) || null,
   });
+  await notifyMatchingMembers({ categoryId, kind: "request", title, excludeCompanyId: user!.companyId! });
   revalidatePath("/dashboard/requests");
   revalidatePath("/requests");
   return { ok: "Buy request posted." };

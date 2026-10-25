@@ -154,6 +154,61 @@ const terminalSeed = [
     lat: 25.1850, lng: 55.4130,
     description: "Dubai's central fruit and vegetable wholesale market and the main re-export hub for produce into the Gulf.",
   },
+
+  // --- Europe ---
+  { slug: "valencia-mercavalencia", name: "Mercavalencia", city: "Valencia", country: "ES", lat: 39.4556, lng: -0.3787, description: "Valencia's wholesale market, close to the Mediterranean citrus and vegetable region." },
+  { slug: "lyon-corbas", name: "Marché de Gros de Lyon-Corbas", city: "Lyon", country: "FR", lat: 45.6667, lng: 4.9167, description: "The wholesale produce market serving Lyon and the Rhône-Alpes region." },
+  { slug: "marseille-les-arnavaux", name: "Marché d'Intérêt National Les Arnavaux", city: "Marseille", country: "FR", lat: 43.3411, lng: 5.3860, description: "Marseille's wholesale market, a gateway for produce from the western Mediterranean and North Africa." },
+  { slug: "rome-car", name: "CAR — Centro Agroalimentare Roma", city: "Rome", country: "IT", lat: 41.8333, lng: 12.6333, description: "Rome's agri-food wholesale centre, one of the largest in central Italy." },
+  { slug: "bologna-caab", name: "CAAB — Centro Agroalimentare di Bologna", city: "Bologna", country: "IT", lat: 44.5190, lng: 11.3870, description: "The wholesale agri-food market for Bologna and Emilia-Romagna." },
+  { slug: "naples-caan", name: "CAAN — Centro Agro Alimentare di Napoli", city: "Naples", country: "IT", lat: 40.9000, lng: 14.3000, description: "Naples' wholesale produce centre serving the Campania region." },
+  { slug: "amsterdam-food-center", name: "Food Center Amsterdam", city: "Amsterdam", country: "NL", lat: 52.3850, lng: 4.8350, description: "Amsterdam's wholesale food market." },
+  { slug: "hamburg-grossmarkt", name: "Großmarkt Hamburg", city: "Hamburg", country: "DE", lat: 53.5450, lng: 10.0300, description: "Hamburg's wholesale market, a major northern-European entry point for imported fruit." },
+  { slug: "berlin-fruchthof", name: "Fruchthof Berlin (Großmarkt)", city: "Berlin", country: "DE", lat: 52.4700, lng: 13.4600, description: "Berlin's central wholesale fruit and vegetable market." },
+  { slug: "munich-grossmarkthalle", name: "Großmarkthalle München", city: "Munich", country: "DE", lat: 48.1180, lng: 11.5470, description: "Munich's wholesale market hall, among the largest in Germany." },
+  { slug: "frankfurt-frischezentrum", name: "FrischeZentrum Frankfurt", city: "Frankfurt", country: "DE", lat: 50.1100, lng: 8.7200, description: "Frankfurt's fresh-produce wholesale centre." },
+  { slug: "london-western-international", name: "Western International Market", city: "London", country: "GB", lat: 51.4890, lng: -0.4100, description: "West London's wholesale fruit and vegetable market at Southall." },
+  { slug: "manchester-new-smithfield", name: "New Smithfield Market", city: "Manchester", country: "GB", lat: 53.4660, lng: -2.1760, description: "Manchester's wholesale market, the main produce hub for north-west England." },
+  { slug: "brussels-mabru", name: "Mabru — Brussels Early Market", city: "Brussels", country: "BE", lat: 50.8730, lng: 4.3690, description: "Brussels' wholesale fruit and vegetable market." },
+  { slug: "warsaw-bronisze", name: "Warsaw Wholesale Market Bronisze", city: "Warsaw", country: "PL", lat: 52.2100, lng: 20.7800, description: "Poland's largest wholesale market for fruit, vegetables and flowers." },
+  { slug: "lisbon-marl", name: "MARL — Mercado Abastecedor de Lisboa", city: "Lisbon", country: "PT", lat: 38.8300, lng: -9.0900, description: "The wholesale supply market for the Lisbon region." },
+  { slug: "athens-central-market", name: "Athens Central Market (Varvakios / Rentis)", city: "Athens", country: "GR", lat: 37.9800, lng: 23.7000, description: "Athens' central wholesale produce market." },
+  { slug: "vienna-grossmarkt", name: "Großmarkt Wien-Inzersdorf", city: "Vienna", country: "AT", lat: 48.1500, lng: 16.3400, description: "Vienna's wholesale market for fruit and vegetables." },
+
+  // --- United States ---
+  { slug: "philadelphia-psm", name: "Philadelphia Wholesale Produce Market", city: "Philadelphia", region: "PA", country: "US", lat: 39.9100, lng: -75.2200, description: "One of the largest fully enclosed, refrigerated wholesale produce markets in the world." },
+  { slug: "boston-nepc", name: "New England Produce Center", city: "Chelsea", region: "MA", country: "US", lat: 42.3900, lng: -71.0400, description: "The wholesale produce market serving Boston and New England." },
+  { slug: "chicago-ipm", name: "Chicago International Produce Market", city: "Chicago", region: "IL", country: "US", lat: 41.8500, lng: -87.6600, description: "Chicago's wholesale produce market." },
+  { slug: "los-angeles-wholesale-produce", name: "Los Angeles Wholesale Produce Market", city: "Los Angeles", region: "CA", country: "US", lat: 34.0350, lng: -118.2300, description: "Downtown LA's wholesale produce market." },
+  { slug: "san-francisco-wholesale-produce", name: "San Francisco Wholesale Produce Market", city: "San Francisco", region: "CA", country: "US", lat: 37.7400, lng: -122.4000, description: "The Bay Area's wholesale produce market." },
+  { slug: "atlanta-state-farmers-market", name: "Atlanta State Farmers Market", city: "Forest Park", region: "GA", country: "US", lat: 33.6200, lng: -84.3700, description: "One of the largest farmers' and wholesale produce markets in the US South." },
+  { slug: "dallas-farmers-wholesale", name: "Dallas Wholesale Produce District", city: "Dallas", region: "TX", country: "US", lat: 32.7800, lng: -96.7900, description: "Dallas-Fort Worth's wholesale produce distribution district." },
+
+  // --- Far East & South Asia ---
+  { slug: "singapore-pasir-panjang", name: "Pasir Panjang Wholesale Centre", city: "Singapore", country: "SG", lat: 1.2800, lng: 103.7700, description: "Singapore's main wholesale centre for fruit and vegetables and a regional re-export hub." },
+  { slug: "guangzhou-jiangnan", name: "Jiangnan Fruit & Vegetable Wholesale Market", city: "Guangzhou", country: "CN", lat: 23.0800, lng: 113.2700, description: "One of the largest fruit wholesale markets in China and Asia." },
+  { slug: "shanghai-huizhan", name: "Shanghai Huizhan Fruit Market", city: "Shanghai", country: "CN", lat: 31.2000, lng: 121.5000, description: "A major fruit wholesale market serving the Shanghai region." },
+  { slug: "beijing-xinfadi", name: "Xinfadi Wholesale Market", city: "Beijing", country: "CN", lat: 39.8100, lng: 116.3200, description: "Beijing's largest wholesale market for agricultural produce." },
+  { slug: "mumbai-vashi-apmc", name: "Vashi APMC Market", city: "Navi Mumbai", country: "IN", lat: 19.0700, lng: 73.0000, description: "The APMC wholesale market serving Mumbai, among India's largest." },
+  { slug: "delhi-azadpur", name: "Azadpur Mandi", city: "Delhi", country: "IN", lat: 28.7070, lng: 77.1750, description: "Asia's largest wholesale market for fruit and vegetables." },
+  { slug: "chennai-koyambedu", name: "Koyambedu Market", city: "Chennai", country: "IN", lat: 13.0700, lng: 80.1900, description: "One of Asia's largest perishable goods wholesale markets, serving South India." },
+  { slug: "kuala-lumpur-selayang", name: "Selayang Wholesale Market", city: "Kuala Lumpur", country: "MY", lat: 3.2500, lng: 101.6500, description: "Malaysia's largest wholesale market for fruit and vegetables." },
+  { slug: "jakarta-kramat-jati", name: "Kramat Jati Central Market", city: "Jakarta", country: "ID", lat: -6.2800, lng: 106.8700, description: "Jakarta's central wholesale market for fruit and vegetables." },
+  { slug: "manila-balintawak", name: "Balintawak Market", city: "Quezon City", country: "PH", lat: 14.6570, lng: 121.0000, description: "Metro Manila's major wholesale market for produce." },
+  { slug: "ho-chi-minh-thu-duc", name: "Thu Duc Wholesale Market", city: "Ho Chi Minh City", country: "VN", lat: 10.8500, lng: 106.7700, description: "Ho Chi Minh City's largest wholesale market for fruit and vegetables." },
+  { slug: "bangkok-talaad-thai", name: "Talaad Thai", city: "Pathum Thani", country: "TH", lat: 14.0700, lng: 100.6200, description: "Thailand's largest wholesale market for agricultural produce, north of Bangkok." },
+
+  // --- Australia ---
+  { slug: "sydney-markets-flemington", name: "Sydney Markets (Flemington)", city: "Sydney", country: "AU", lat: -33.8700, lng: 151.0600, description: "Australia's largest fruit and vegetable wholesale market." },
+  { slug: "melbourne-market-epping", name: "Melbourne Market", city: "Epping", country: "AU", lat: -37.6400, lng: 145.0200, description: "The wholesale fruit, vegetable and flower market for Victoria." },
+  { slug: "brisbane-markets-rocklea", name: "Brisbane Markets (Rocklea)", city: "Brisbane", country: "AU", lat: -27.5500, lng: 153.0100, description: "Queensland's central fruit and vegetable wholesale market." },
+  { slug: "perth-market-city", name: "Market City (Canning Vale)", city: "Perth", country: "AU", lat: -32.0700, lng: 115.9100, description: "Western Australia's wholesale fruit and vegetable market." },
+  { slug: "adelaide-produce-market", name: "South Australian Produce Market", city: "Pooraka", country: "AU", lat: -34.8300, lng: 138.6200, description: "South Australia's central wholesale produce market." },
+
+  // --- Gulf & Middle East ---
+  { slug: "abu-dhabi-mina", name: "Mina Fruit & Vegetable Market", city: "Abu Dhabi", country: "AE", lat: 24.5100, lng: 54.3800, description: "Abu Dhabi's central wholesale market for fruit and vegetables." },
+  { slug: "riyadh-central-market", name: "Riyadh Central Wholesale Market", city: "Riyadh", country: "SA", lat: 24.6300, lng: 46.7700, description: "Riyadh's wholesale market for fruit and vegetables." },
+  { slug: "jeddah-central-market", name: "Jeddah Central Vegetable & Fruit Market", city: "Jeddah", country: "SA", lat: 21.5400, lng: 39.2000, description: "Jeddah's wholesale produce market, a Red Sea import hub." },
 ];
 
 const founders = [

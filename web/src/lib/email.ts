@@ -45,3 +45,34 @@ export async function notifyClaimDecision(p: { email: string; companyName: strin
       : `We couldn't verify your claim for ${p.companyName}. Reply with proof you work there and we'll take another look.`,
   );
 }
+
+export async function notifyMatchingMembers(p: {
+  categoryId: string;
+  kind: "offer" | "request";
+  title: string;
+  excludeCompanyId: string;
+}) {
+  const { and, eq, ne, inArray } = await import("drizzle-orm");
+  const { companyProducts, subscriptions, companies: comps } = await import("@/db/schema");
+  // An offer (someone selling) alerts buyers of that category; a request alerts sellers.
+  const wantDirection = p.kind === "offer" ? "BUYS" : "SELLS";
+  const rows = await db
+    .select({ email: comps.email, name: comps.name })
+    .from(companyProducts)
+    .innerJoin(comps, eq(comps.id, companyProducts.companyId))
+    .innerJoin(subscriptions, eq(subscriptions.companyId, comps.id))
+    .where(
+      and(
+        eq(companyProducts.categoryId, p.categoryId),
+        eq(companyProducts.direction, wantDirection),
+        ne(comps.id, p.excludeCompanyId),
+        eq(subscriptions.status, "ACTIVE"),
+        inArray(subscriptions.plan, ["SELLER_PRO", "BUYER_PRO"]),
+      ),
+    )
+    .limit(50);
+  const subject = p.kind === "offer" ? `New offer on Fruit Terminal: ${p.title}` : `New buy request on Fruit Terminal: ${p.title}`;
+  for (const r of rows) {
+    if (r.email) await send(r.email, subject, `A new ${p.kind} matches products you trade: "${p.title}".\n\nBrowse it: ${SITE}/${p.kind === "offer" ? "offers" : "requests"}`);
+  }
+}
