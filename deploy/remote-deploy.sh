@@ -87,17 +87,15 @@ $DOMAIN {
 CADDY
   if [ -n "$WWW" ]; then printf '\n%s {\n\tredir https://%s{uri} permanent\n}\n' "$WWW" "$DOMAIN" >> "$site"; fi
   installed="/opt/proxy/caddy/sites/$APP_NAME.caddy"
-  if [ -f "$installed" ] && cmp -s "$site" "$installed"; then
-    echo "Web front: $DOMAIN already routed to $gw:$APP_PORT (unchanged)."
-  else
-    # `proxy site add` validates, installs and reloads, then checks every site. A site whose DNS is not pointed here
-    # yet (no certificate possible) fails that last check; that is a warning, not a failed deploy, once installed.
-    if ! proxy site add "$APP_NAME" "$site"; then
-      if [ -f "$installed" ] && cmp -s "$site" "$installed"; then
-        echo "::warning::Caddy block for $DOMAIN is installed, but the proxy's site check reported a problem (often: DNS for $DOMAIN does not point at this server yet, so no certificate)."
-      else
-        echo "!! proxy site add failed and the block was not installed."; exit 1
-      fi
+  # Always (re)apply, even when the block is unchanged: `proxy site add` reloads Caddy, which re-attempts any
+  # certificate it is still missing (e.g. when the domain's DNS was pointed here only after the first deploy).
+  # `proxy site add` validates, installs and reloads, then checks every site. A site whose DNS is not pointed here
+  # yet (no certificate possible) fails that last check; that is a warning, not a failed deploy, once installed.
+  if ! proxy site add "$APP_NAME" "$site"; then
+    if [ -f "$installed" ] && cmp -s "$site" "$installed"; then
+      echo "::warning::Caddy block for $DOMAIN is installed, but the proxy's site check reported a problem (often: DNS for $DOMAIN does not point at this server yet, so no certificate)."
+    else
+      echo "!! proxy site add failed and the block was not installed."; exit 1
     fi
   fi
   sleep 3
