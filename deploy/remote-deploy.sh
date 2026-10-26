@@ -152,5 +152,12 @@ fi
 echo "==> Certificate status for $DOMAIN"
 echo "DNS: $(getent ahostsv4 "$DOMAIN" | awk '{print $1; exit}')"
 docker logs --since 30m proxy-caddy 2>&1 | grep -i "$DOMAIN" | grep -iE "certificate|obtain|error|challenge|acme" | tail -6 | cut -c1-260 || true
+# Surface cert diagnostics as annotations (readable via the API when raw logs are not). TEMP: remove after debugging.
+_cl=$(docker logs --since 6h proxy-caddy 2>&1 | grep -i "$DOMAIN" | grep -iE "acme|challenge|obtain|error|rate|urn:|cert" | tail -10 | tr '\n' '~' | sed 's/%/pct/g' | cut -c1-1200)
+echo "::warning title=caddy-cert-log::${_cl:-no proxy-caddy log lines mention $DOMAIN (it may log to a file, not stdout)}"
+_iss=$(echo | timeout 8 openssl s_client -servername "$DOMAIN" -connect 127.0.0.1:443 2>/dev/null | openssl x509 -noout -issuer -enddate 2>/dev/null | tr '\n' ' ')
+echo "::warning title=served-cert::${_iss:-could not read the served certificate}"
+_probe=$(curl -sS -o /dev/null -w 'code=%{http_code} verify=%{ssl_verify_result}' --max-time 10 "https://$DOMAIN$HEALTH_PATH" 2>&1 | cut -c1-120)
+echo "::warning title=ext-probe::$_probe"
 echo "==> Deployed. Health check:"
 curl -s -o /dev/null -w "https://$DOMAIN$HEALTH_PATH -> %{http_code}\n" --max-time 20 "https://$DOMAIN$HEALTH_PATH" || true
