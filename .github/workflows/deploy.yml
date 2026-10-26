@@ -5,7 +5,7 @@ name: Deploy to VPS
 # Any secret named APP_<NAME> is sent to the server as <NAME> in the app's environment (e.g. APP_SMTP_PASSWORD).
 # Variable (Settings -> Secrets and variables -> Actions -> Variables): DOMAIN, unless the default below is right.
 # Runs on every push to main, or by hand from the Actions tab ("Run workflow").
-# The site is ft.saguenygroup.com for now; a repository variable DOMAIN overrides it (e.g. fruitterminal.com later).
+# The site is fruitterminal.site; a repository variable DOMAIN overrides it.
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      DOMAIN: ${{ vars.DOMAIN || 'ft.saguenygroup.com' }}
+      DOMAIN: ${{ vars.DOMAIN || 'fruitterminal.site' }}
       APP_DIR: /var/www/fruitterminal
     steps:
       - uses: actions/checkout@v4
